@@ -4,9 +4,10 @@ import { contentfulClient } from '../lib/contentful';
 import type { Document } from '@contentful/rich-text-types';
 import { documentToHtmlString } from '@contentful/rich-text-html-renderer';
 import type { ContentfulAssetField } from '../types/contentful';
+import WaveSeparator from '../components/WaveSeparator.astro';
 
 const entries = await contentfulClient.getEntries({
-  content_type: 'leChoeur'
+  content_type: 'leChoeur',
 });
 
 const leCoeur = await entries.items[0];
@@ -22,24 +23,32 @@ const photoAlt = photo?.fields?.title || 'Image de bannière';
 // Répertoire
 const notreRepertoireTitre = leCoeur?.fields?.notreRepertoireTitre;
 const notreRepertoireTexte = leCoeur?.fields?.notreRepertoireTexte as Document;
-const notreRepertoireTexteHtml = notreRepertoireTexte ? documentToHtmlString(notreRepertoireTexte) : '';
+const notreRepertoireTexteHtml = notreRepertoireTexte
+  ? documentToHtmlString(notreRepertoireTexte)
+  : '';
 
 // Nos valeurs
 const nosValeursTitre = leCoeur?.fields?.nosValeursTitre;
 const valeur1 = leCoeur?.fields?.valeur1;
-const valeur1Desc = leCoeur?.fields?.valeur1Description ? documentToHtmlString(leCoeur.fields.valeur1Description as Document) : '';
+const valeur1Desc = leCoeur?.fields?.valeur1Description
+  ? documentToHtmlString(leCoeur.fields.valeur1Description as Document)
+  : '';
 const valeur2 = leCoeur?.fields?.valeur2;
-const valeur2Desc = leCoeur?.fields?.valeur2Description ? documentToHtmlString(leCoeur.fields.valeur2Description as Document) : '';
+const valeur2Desc = leCoeur?.fields?.valeur2Description
+  ? documentToHtmlString(leCoeur.fields.valeur2Description as Document)
+  : '';
 const valeur3 = leCoeur?.fields?.valeur3;
-const valeur3Desc = leCoeur?.fields?.valeur3Description ? documentToHtmlString(leCoeur.fields.valeur3Description as Document) : '';
+const valeur3Desc = leCoeur?.fields?.valeur3Description
+  ? documentToHtmlString(leCoeur.fields.valeur3Description as Document)
+  : '';
 
 // Cheffe de chœur
-const chefDeChoeurTitre = leCoeur?.fields?.chefDeChoeurTitre;
+const chefDeChoeurTitre = leCoeur?.fields?.cheffeDeChoeurTitre;
 
-const chefDeChoeurTexte = leCoeur?.fields?.chefDeChoeurTexte as Document;
+const chefDeChoeurTexte = leCoeur?.fields?.cheffeDeChoeurTexte as Document;
 const chefDeChoeurTexteHtml = chefDeChoeurTexte ? documentToHtmlString(chefDeChoeurTexte) : '';
 
-const chefDeChoeurPhoto = leCoeur?.fields?.chefDeChoeurPhoto as ContentfulAssetField | undefined;
+const chefDeChoeurPhoto = leCoeur?.fields?.cheffeDeChoeurPhoto as ContentfulAssetField | undefined;
 const chefDeChoeurPhotoUrl = chefDeChoeurPhoto?.fields?.file?.url + '?w=1400&q=100&fm=webp';
 const chefDeChoeurPhotoAlt = chefDeChoeurPhoto?.fields?.title || '';
 
@@ -48,68 +57,197 @@ const listeAnciensChefsNoms = leCoeur?.fields?.listeAnciensCheffesNoms as Array<
 ---
 
 <Layout title="Présentation du chœur Cassiopée, Lyon - Chorale de jeunes">
-	<div class="container">
-		<h1>Le Chœur <strong>Cassiopée</strong></h1>
-    <section class="presentation-section">
-        <div class="presentation-section__text">
-          <Fragment set:html={presentationHtml} />
-        </div>
-        <img class="presentation-section__image" src={`https:${photoUrl}`} alt={photoAlt} />
-    </section>
-    <section class="repertoire-section">
-      <h2>{notreRepertoireTitre}</h2>
-      <div class="repertoire-section__text">
+  <section class="presentation-section c-global-container">
+    <div class="presentation-section__text c-global-text-container">
+      <h1 class="presentation-section__title c-global-title">Le Chœur <b>Cassiopée</b></h1>
+      <Fragment set:html={presentationHtml} />
+    </div>
+    <img class="presentation-section__image" src={`https:${photoUrl}`} alt={photoAlt} />
+  </section>
+  <WaveSeparator />
+  <section class="repertoire-section">
+    <div class="c-global-container">
+      <h2 class="c-global-title">{notreRepertoireTitre}</h2>
+      <div class="repertoire-section__text c-global-text-container">
         <Fragment set:html={notreRepertoireTexteHtml} />
       </div>
-    </section>
-    <section class="nos-valeurs-section">
-      <h2 class="nos-valeurs-section__title">{nosValeursTitre}</h2>
+    </div>
+  </section>
+  <section class="nos-valeurs-section">
+    <div class="c-global-container">
+      <h2 class="nos-valeurs-section__title c-global-title">{nosValeursTitre}</h2>
       <ol class="nos-valeurs-section__list">
         <li>
           <h3 class="value">{valeur1}</h3>
-          <div class="test">
+          <div class="c-global-text-container">
             <Fragment set:html={valeur1Desc} />
           </div>
         </li>
         <li>
           <h3 class="value">{valeur2}</h3>
-          <div class="test">
+          <div class="c-global-text-container">
             <Fragment set:html={valeur2Desc} />
           </div>
         </li>
         <li>
           <h3 class="value">{valeur3}</h3>
-          <div class="test">
+          <div class="c-global-text-container">
             <Fragment set:html={valeur3Desc} />
           </div>
         </li>
       </ol>
-    </section>
-    <section class="chef-section">
-      <h2 class="chef-section__title">{chefDeChoeurTitre}</h2>
-      <div class="chef-section__content">
-        <div class="chef-section__text">
+    </div>
+  </section>
+  <WaveSeparator flip />
+  <section class="chef-section c-global-container">
+    <div class="chef-section__content">
+      <img
+        class="chef-section__image"
+        src={`https:${chefDeChoeurPhotoUrl}`}
+        alt={chefDeChoeurPhotoAlt}
+      />
+      <div class="chef-section__text">
+        <h2 class="chef-section__title c-global-title">{chefDeChoeurTitre}</h2>
+        <div class="c-global-text-container">
           <Fragment set:html={chefDeChoeurTexteHtml} />
         </div>
-        <img class="chef-section__image" src={`https:${chefDeChoeurPhotoUrl}`} alt={chefDeChoeurPhotoAlt} />
       </div>
-    </section>
-    <section class="anciens-chefs-section">
-      <h2 class="anciens-chef-section__title">{listeAnciensChefsTitre}</h2>
-      <ol class="anciens-chef-section__list">
-        {
-          listeAnciensChefsNoms.map((name) => <li>{name}</li>)
-        }
-      </ol>
-    </section>
-	</div>
+    </div>
+  </section>
+  <section class="anciens-chefs-section c-global-container">
+    <h2 class="anciens-chefs-section__title c-global-title">{listeAnciensChefsTitre}</h2>
+    <ol class="anciens-chefs-section__list">
+      {listeAnciensChefsNoms.map((name) => <li>{name}</li>)}
+    </ol>
+  </section>
 </Layout>
 
 <style>
-	.container {
-		margin: auto;
-		padding: 1rem;
-		width: 100%;
-		max-width: 1200px;
-	}
+  /* PRÉSENTATION */
+  .presentation-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: 3rem;
+    padding-bottom: 2rem;
+  }
+
+  .presentation-section__title b {
+    color: var(--c-bleu);
+  }
+
+  .presentation-section__image {
+    width: 100%;
+  }
+
+  /* RÉPERTOIRE */
+  .repertoire-section {
+    background-color: white;
+
+    & > div {
+      max-width: 900px;
+    }
+  }
+
+  /* NOS VALEURS */
+  .nos-valeurs-section {
+    padding-top: 3rem;
+    background-color: white;
+
+    &::before {
+      content: '';
+      display: block;
+      width: 5rem;
+      margin: 0 auto 2rem;
+      border-top: 2px dotted var(--c-bleu);
+    }
+  }
+
+  .nos-valeurs-section__title {
+    text-align: center;
+  }
+
+  .nos-valeurs-section__list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 3rem;
+    padding-left: 0;
+    list-style: none;
+
+    .value {
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+    }
+
+    li:first-child .value {
+      color: var(--c-orange);
+    }
+
+    li:nth-child(2) .value {
+      color: var(--c-bleu);
+    }
+
+    li:nth-child(3) .value {
+      color: var(--c-vert);
+    }
+  }
+
+  /* CHEF(FE) DE CHOEUR */
+  .chef-section__content {
+    display: grid;
+    grid-template-columns: calc(33.33% - 2rem) 1fr;
+    align-items: center;
+    gap: 3rem;
+    padding-block: 3rem;
+  }
+
+  .chef-section__text {
+  }
+
+  .chef-section__image {
+    width: 100%;
+  }
+
+  /* ANCIENS CHEFS */
+  .anciens-chefs-section {
+    max-width: 680px;
+  }
+
+  .anciens-chefs-section__title {
+    font-size: 2rem;
+    text-align: center;
+  }
+
+  .anciens-chefs-section__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    justify-content: center;
+    padding-left: 0;
+    list-style: none;
+
+    li {
+      padding: 0.5em 1.25em;
+      color: white;
+      font-size: 0.875rem;
+      font-weight: 600;
+      border-radius: 100px;
+
+      &:nth-child(4n + 1) {
+        background-color: var(--c-orange);
+      }
+
+      &:nth-child(4n + 2) {
+        background-color: var(--c-vert);
+      }
+
+      &:nth-child(4n + 3) {
+        background-color: var(--c-bleu);
+      }
+
+      &:nth-child(4n + 4) {
+        background-color: var(--c-taupe);
+      }
+    }
+  }
 </style>

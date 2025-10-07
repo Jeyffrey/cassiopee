@@ -1,30 +1,194 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { contentfulClient } from '../lib/contentful';
+import type { Document } from '@contentful/rich-text-types';
+import { documentToHtmlString } from '@contentful/rich-text-html-renderer';
+
+const entries = await contentfulClient.getEntries({
+  content_type: 'concert',
+});
+
+const allConcerts = entries.items.map((entry) => entry.fields);
+
+const now = new Date();
+const upcomingConcerts = allConcerts
+  .filter((concert) => new Date(concert.date as string) >= now)
+  .sort((a, b) => new Date(a.date as string).getTime() - new Date(b.date as string).getTime());
+const pastConcerts = allConcerts
+  .filter((concert) => new Date(concert.date as string) < now)
+  .sort((a, b) => new Date(b.date as string).getTime() - new Date(a.date as string).getTime());
+
+const getDate = (dateString: string) => {
+  const date = new Date(dateString);
+  const frenchMonths = [
+    'janvier',
+    'février',
+    'mars',
+    'avril',
+    'mai',
+    'juin',
+    'juillet',
+    'août',
+    'septembre',
+    'octobre',
+    'novembre',
+    'décembre',
+  ];
+
+  const day = date.getDate();
+  const month = frenchMonths[date.getMonth()];
+  const year = date.getFullYear();
+
+  return `${day} ${month} ${year}`;
+};
+
+const getTime = (dateString: string) => {
+  const date = new Date(dateString);
+
+  const hours = date.getHours().toString().padStart(2, '0');
+  const minutes = date.getMinutes().toString().padStart(2, '0');
+
+  return `${hours}h${minutes}`;
+};
 ---
 
-<Layout title="Concerts | Cassiopée Astro">
-	<div class="container">
-		<h1>Concerts</h1>
-	</div>
+<Layout title="Concerts du chœur Cassiopée, Lyon - Chorale de jeunes">
+  <section class="concerts c-global-container">
+    <h1 class="concerts__main-title c-global-title">Nos concerts</h1>
+
+    <h2 class="concerts__sub-title">Concerts à venir</h2>
+    {
+      upcomingConcerts.length > 0 ? (
+        <ol class="concerts__list">
+          {upcomingConcerts.map((concert) => (
+            <li>
+              <h2 class="title">{concert.titre}</h2>
+              <p class="date">
+                <strong>{getDate(concert.date as string)}</strong>
+                <span>{getTime(concert.date as string)}</span>
+              </p>
+              <div class="place c-global-text-container">
+                <Fragment set:html={documentToHtmlString(concert.lieu as Document)} />
+              </div>
+              {concert.texte && (
+                <div class="text c-global-text-container">
+                  <Fragment set:html={documentToHtmlString(concert.texte as Document)} />
+                </div>
+              )}
+            </li>
+          ))}
+        </ol>
+      ) : (
+        <p>Il n'y a pas encore de concerts à venir</p>
+      )
+    }
+
+    {
+      pastConcerts.length > 0 && (
+        <>
+          <h2 class="concerts__sub-title concerts__sub-title--old">Concerts passés</h2>
+          <ol class="concerts__list concerts__list--old">
+            {pastConcerts.map((concert) => (
+              <li>
+                <h2 class="title">{concert.titre}</h2>
+                <p class="date">
+                  <strong>{getDate(concert.date as string)}</strong>
+                  <span>{getTime(concert.date as string)}</span>
+                </p>
+                <div class="place c-global-text-container">
+                  <Fragment set:html={documentToHtmlString(concert.lieu as Document)} />
+                </div>
+                {concert.texte && (
+                  <div class="text c-global-text-container">
+                    <Fragment set:html={documentToHtmlString(concert.texte as Document)} />
+                  </div>
+                )}
+              </li>
+            ))}
+          </ol>
+        </>
+      )
+    }
+  </section>
 </Layout>
 
 <style>
-	.container {
-		margin: auto;
-		padding: 1rem;
-		width: 100%;
-		max-width: 1200px;
-	}
+  .concerts {
+    max-width: 800px;
+  }
 
-	h1 {
-		font-size: 3rem;
-		font-weight: 700;
-		line-height: 1;
-		margin-bottom: 1em;
-		background-image: var(--accent-gradient);
-		-webkit-background-clip: text;
-		-webkit-text-fill-color: transparent;
-		background-size: 400%;
-		background-position: 0%;
-	}
+  .concerts__main-title {
+    margin-bottom: 3rem;
+    text-align: center;
+  }
+
+  .concerts__sub-title {
+    text-align: center;
+    font-size: 1.25rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--c-vert);
+  }
+  .concerts__sub-title--old {
+    color: var(--c-bleu);
+
+    &::before {
+      content: '';
+      display: block;
+      width: 5rem;
+      margin: 3rem auto;
+      border-top: 2px dotted var(--c-bleu);
+    }
+  }
+
+  .concerts__list {
+    padding-left: 0;
+    list-style: none;
+
+    li {
+      margin-top: 1.5rem;
+      padding: 1.5rem 2rem;
+      background-color: white;
+      border-radius: 1.5rem;
+    }
+
+    .title {
+      margin-block: 0 1rem;
+      font-size: 1.125rem;
+      color: var(--c-vert);
+    }
+
+    .date {
+      margin: 0;
+      padding: 0.5em 0 0.5em 1em;
+      line-height: 1.5;
+      border: 2px dotted var(--c-taupe);
+
+      strong {
+        display: block;
+        font-size: 1.125rem;
+        font-weight: 600;
+        color: var(--c-taupe);
+      }
+    }
+
+    .place {
+      padding: 0.5em 0 0.5em 1em;
+      white-space: pre-line;
+      border: 2px dotted var(--c-taupe);
+      border-top: none;
+
+      & > :first-child {
+        margin-top: 0;
+      }
+    }
+
+    .text {
+      opacity: 0.75;
+    }
+  }
+
+  .concerts__list--old {
+    opacity: 0.75;
+  }
 </style>

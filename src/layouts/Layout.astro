@@ -3,82 +3,138 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 
 interface Props {
-	title?: string;
+  title?: string;
+  pageClass?: string;
 }
 
-const { title = "Cassiopée Astro" } = Astro.props;
+const { title = 'Cassiopée Astro', pageClass } = Astro.props;
 ---
 
 <!doctype html>
 <html lang="fr">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="generator" content={Astro.generator} />
-		<title>{title}</title>
-	</head>
-	<body>
-		<Header />
-		<main>
-			<slot />
-		</main>
-		<Footer />
-	</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+  </head>
+  <body class={pageClass}>
+    <Header />
+    <main>
+      <slot />
+    </main>
+    <Footer />
+  </body>
 </html>
 
 <style is:global>
-@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300..700;1,300..700&family=Quicksand:wght@300..700&display=swap");
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300..700;1,300..700&family=Quicksand:wght@300..700&display=swap');
 
-:root {
-	--c-beige: #f3ece4;
-	--c-orange: #aa603d;
-	--c-vert: #56704d;
-	--c-taupe: #ae8d6a;
-	--c-bleu: #6d7f8e;
-}
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
 
-html {
-	font-family: "Quicksand", sans-serif;
-  font-optical-sizing: auto;
-  font-weight: 500;
-  font-style: normal;
-  font-size: 1.125rem;
-	background-color: var(--c-beige);
-}
+  :root {
+    --c-beige: #f3ece4;
+    --c-orange: #aa603d;
+    --c-vert: #56704d;
+    --c-taupe: #ae8d6a;
+    --c-bleu: #6d7f8e;
+  }
 
-body {
-	display: flex;
-	flex-direction: column;
-	width: 100%;
-	min-height: 100vh;
-	margin: 0;
-}
+  html {
+    font-family: 'Quicksand', sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-style: normal;
+    font-size: 1.125rem;
+    background-color: var(--c-beige);
+  }
 
-main {
-	flex: 1;
-}
+  body {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    min-height: 100vh;
+    margin: 0;
+  }
 
-/* Global link */
-.c-global-link {
-  position: relative;
-  display: inline-block;
-  margin-left: 1.5em;
-  color: #333;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  border-bottom: 2px dotted var(--c-orange);
-  text-decoration: none;
-}
+  main {
+    flex: 1;
+  }
 
-.c-global-link::before {
-  content: "";
-  position: absolute;
-  top: 0.25em;
-  right: calc(100% + 0.5em);
-  width: 0.75em;
-  height: 0.75em;
-  border-radius: 50%;
-  background-color: var(--c-orange);
-}
+  .c-global-container {
+    margin: auto;
+    padding: 1rem;
+    width: 100%;
+    max-width: 1280px;
+  }
+
+  /* Global title */
+  .c-global-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-optical-sizing: auto;
+    font-weight: normal;
+    font-style: normal;
+    font-size: 3rem;
+
+    &:first-child {
+      margin-top: 0;
+    }
+
+    &:not(:last-child) {
+      margin-bottom: 1.5rem;
+    }
+
+    b {
+      font-family: 'Quicksand', sans-serif;
+      font-size: 0.875em;
+    }
+  }
+
+  /* Global link */
+  .c-global-link {
+    position: relative;
+    display: inline-block;
+    margin-left: 1.5em;
+    color: #333;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    border-bottom: 2px dotted var(--c-orange);
+    text-decoration: none;
+  }
+
+  .c-global-link::before {
+    content: '';
+    position: absolute;
+    top: 0.25em;
+    right: calc(100% + 0.5em);
+    width: 0.75em;
+    height: 0.75em;
+    border-radius: 50%;
+    background-color: var(--c-orange);
+  }
+
+  /* Global text container */
+  .c-global-text-container {
+    line-height: 1.7;
+
+    & > :last-child {
+      margin-bottom: 0;
+    }
+
+    a {
+      font-weight: 600;
+      color: var(--c-orange);
+      text-decoration: none;
+      border-bottom: 2px dotted currentColor;
+
+      &:hover {
+        filter: brightness(60%);
+      }
+    }
+  }
 </style>

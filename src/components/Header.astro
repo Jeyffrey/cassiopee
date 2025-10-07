@@ -20,27 +20,47 @@ const navigation = [
         </a>
       </li>
       <li>
-        <a class="main-header__menu-link" href={navigation[1].href} class={pathname === navigation[1].href ? 'active' : ''}>
+        <a
+          class="main-header__menu-link"
+          href={navigation[1].href}
+          class={pathname === navigation[1].href ? 'active' : ''}
+        >
           {navigation[1].label}
         </a>
       </li>
       <li>
-        <a class="main-header__menu-link" href={navigation[2].href} class={pathname === navigation[2].href ? 'active' : ''}>
+        <a
+          class="main-header__menu-link"
+          href={navigation[2].href}
+          class={pathname === navigation[2].href ? 'active' : ''}
+        >
           {navigation[2].label}
         </a>
       </li>
       <li>
-        <a class="main-header__menu-link" href={navigation[3].href} class={pathname === navigation[3].href ? 'active' : ''}>
+        <a
+          class="main-header__menu-link"
+          href={navigation[3].href}
+          class={pathname === navigation[3].href ? 'active' : ''}
+        >
           {navigation[3].label}
         </a>
       </li>
       <li>
-        <a class="main-header__menu-link" href={navigation[4].href} class={pathname === navigation[4].href ? 'active' : ''}>
+        <a
+          class="main-header__menu-link"
+          href={navigation[4].href}
+          class={pathname === navigation[4].href ? 'active' : ''}
+        >
           {navigation[4].label}
         </a>
       </li>
       <li>
-        <a class="main-header__menu-link" href={navigation[5].href} class={pathname === navigation[5].href ? 'active' : ''}>
+        <a
+          class="main-header__menu-link"
+          href={navigation[5].href}
+          class={pathname === navigation[5].href ? 'active' : ''}
+        >
           {navigation[5].label}
         </a>
       </li>
@@ -49,54 +69,54 @@ const navigation = [
 </header>
 
 <style>
-.main-header {
-  position: relative;
-}
+  .main-header {
+    position: relative;
+  }
 
-.main-header__menu {
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 5rem 2rem;
-}
+  .main-header__menu {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 5rem 2rem;
+  }
 
-.main-header__menu-list {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin: 0;
-  padding-left: 0;
-  list-style: none;
+  .main-header__menu-list {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin: 0;
+    padding-left: 0;
+    list-style: none;
 
-  & li:first-child {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    
-    img {
-      display: block;
-      height: 9rem;
+    & li:first-child {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+
+      img {
+        display: block;
+        height: 9rem;
+      }
+    }
+
+    & li:nth-child(5) {
+      margin-left: auto;
     }
   }
 
-  & li:nth-child(5) {
-    margin-left: auto;
-  }
-}
+  .main-header__menu-link {
+    color: inherit;
+    text-decoration: none;
 
-.main-header__menu-link {
-  color: inherit;
-  text-decoration: none;
+    &::after {
+      content: '';
+      display: block;
+      padding-top: 0.15em;
+      border-bottom: 2px dotted currentColor;
+    }
 
-  &::after {
-    content: '';
-    display: block;
-    padding-top: 0.15em;
-    border-bottom: 2px dotted currentColor;
+    &:hover {
+      color: var(--c-orange);
+    }
   }
-
-  &:hover {
-    color: var(--c-orange);
-  }
-}
 </style>

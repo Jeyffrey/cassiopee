@@ -1,4 +1,4 @@
-import * as contentful from "contentful";
+import * as contentful from 'contentful';
 
 // Initialisez le client Contentful
 export const contentfulClient = contentful.createClient({

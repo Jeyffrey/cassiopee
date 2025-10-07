@@ -3,7 +3,7 @@ import { contentfulClient } from '../lib/contentful';
 import type { Document } from '@contentful/rich-text-types';
 
 const entries = await contentfulClient.getEntries({
-  content_type: 'footer'
+  content_type: 'footer',
 });
 
 const footer = entries.items[0];
@@ -17,87 +17,120 @@ const lienHelloAsso = footer?.fields?.lienHelloAsso as string;
 ---
 
 <footer>
-    <div class="left">
-        <div>
-            <h3>CHOEUR CASSIOPÉE</h3>
-            <p class="adress">{adresse}</p>
-            <a href="#">Mentions légales</a>
-        </div>
-        <div>
-            <h3>Téléphone</h3>
-            {telephone && <p>{telephone}</p>}
-        </div>
-        <div>
-            <h3>Courriel</h3>
-            {email && <p>{email}</p>}
-        </div>
+  <div class="left">
+    <div>
+      <h3>CHOEUR CASSIOPÉE</h3>
+      <p class="adress">{adresse}</p>
+      <a href="#">Mentions légales</a>
     </div>
-    <div class="right">
-        <ul>
-            {lienFacebook && <li><a href={lienFacebook} target="_blank">Facebook</a></li>}
-            {lienInstagram && <li><a href={lienInstagram} target="_blank">Instagram</a></li>}
-            {lienYoutube && <li><a href={lienYoutube} target="_blank">Youtube</a></li>}
-            {lienHelloAsso && <li><a href={lienHelloAsso} target="_blank">HelloAsso</a></li>}
-        </ul>
+    <div>
+      <h3>Téléphone</h3>
+      {telephone && <p>{telephone}</p>}
     </div>
+    <div>
+      <h3>Courriel</h3>
+      {email && <p>{email}</p>}
+    </div>
+  </div>
+  <div class="right">
+    <ul>
+      {
+        lienFacebook && (
+          <li>
+            <a href={lienFacebook} target="_blank">
+              Facebook
+            </a>
+          </li>
+        )
+      }
+      {
+        lienInstagram && (
+          <li>
+            <a href={lienInstagram} target="_blank">
+              Instagram
+            </a>
+          </li>
+        )
+      }
+      {
+        lienYoutube && (
+          <li>
+            <a href={lienYoutube} target="_blank">
+              Youtube
+            </a>
+          </li>
+        )
+      }
+      {
+        lienHelloAsso && (
+          <li>
+            <a href={lienHelloAsso} target="_blank">
+              HelloAsso
+            </a>
+          </li>
+        )
+      }
+    </ul>
+  </div>
 </footer>
 
 <style>
-footer {
-  display: flex;
-  justify-content: space-between;
-  width: min(100%, 1300px);
-  margin: 0 auto;
-  padding-block: 3rem;
-  font-size: 0.875rem;
-  line-height: 1.6;
-
-  h3 {
-    margin-bottom: 0.25em;
-    color: #333;
-  }
-
-  p {
-    margin-top: 0;
-  }
-
-  .left {
+  footer {
     display: flex;
-    gap: 5rem;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 3rem 1rem;
+    font-size: 0.875rem;
+    line-height: 1.6;
 
-    a {
+    h3 {
+      margin-bottom: 0.25em;
       color: #333;
-      font-size: 0.875em;
-      font-weight: 600;
-      letter-spacing: 0.1em;
-      border-bottom: 2px dotted #aa603d;
-      text-decoration: none;
     }
 
-    .adress {
-        white-space: pre-line;
-    }
-  }
-
-  .right {
-    ul {
-      list-style: none;
-      margin: 0;
-      padding: 0;
+    p {
+      margin-top: 0;
     }
 
-    li {
-      margin-top: 0.5em;
-      text-align: right;
+    .left {
+      display: flex;
+      gap: 5rem;
 
       a {
         color: #333;
+        font-size: 0.875em;
         font-weight: 600;
         letter-spacing: 0.1em;
         border-bottom: 2px dotted #aa603d;
         text-decoration: none;
       }
+
+      .adress {
+        white-space: pre-line;
+      }
+    }
+
+    .right {
+      ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      li {
+        margin-top: 0.5em;
+        text-align: right;
+
+        a {
+          color: #333;
+          font-weight: 600;
+          letter-spacing: 0.1em;
+          border-bottom: 2px dotted #aa603d;
+          text-decoration: none;
+        }
+      }
     }
   }
-}
 </style>
