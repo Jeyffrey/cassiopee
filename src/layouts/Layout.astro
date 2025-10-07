@@ -59,6 +59,31 @@ main {
 	flex: 1;
 }
 
+.c-global-container {
+  margin: auto;
+  padding: 1rem;
+  width: 100%;
+  max-width: 1200px;
+}
+
+/* Global title */
+.c-global-title {
+  font-family: "Cormorant Garamond", serif;
+  font-optical-sizing: auto;
+  font-weight: normal;
+  font-style: normal;
+  font-size: 3rem;
+
+  &:first-child {
+    margin-top: 0;
+  }
+
+  b {
+    font-family: "Quicksand", sans-serif;
+    font-size: 0.875em;
+  }
+}
+
 /* Global link */
 .c-global-link {
   position: relative;
@@ -80,5 +105,21 @@ main {
   height: 0.75em;
   border-radius: 50%;
   background-color: var(--c-orange);
+}
+
+/* Global text container */
+.c-global-text-container {
+  line-height: 1.7;
+
+  a {
+    font-weight: 600;
+    color: var(--c-orange);
+    text-decoration: none;
+    border-bottom: 2px dotted currentColor;
+
+    &:hover {
+      filter: brightness(60%);
+    }
+  }
 }
 </style>
