@@ -1,0 +1,115 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { contentfulClient } from '../lib/contentful';
+import type { Document } from '@contentful/rich-text-types';
+import { documentToHtmlString } from '@contentful/rich-text-html-renderer';
+import type { ContentfulAssetField } from '../types/contentful';
+
+const entries = await contentfulClient.getEntries({
+  content_type: 'leChoeur'
+});
+
+const leCoeur = await entries.items[0];
+
+// Présentation
+const presentation = leCoeur?.fields?.presentation as Document;
+const presentationHtml = presentation ? documentToHtmlString(presentation) : '';
+
+const photo = leCoeur?.fields?.photo as ContentfulAssetField | undefined;
+const photoUrl = photo?.fields?.file?.url + '?w=1400&q=100&fm=webp';
+const photoAlt = photo?.fields?.title || 'Image de bannière';
+
+// Répertoire
+const notreRepertoireTitre = leCoeur?.fields?.notreRepertoireTitre;
+const notreRepertoireTexte = leCoeur?.fields?.notreRepertoireTexte as Document;
+const notreRepertoireTexteHtml = notreRepertoireTexte ? documentToHtmlString(notreRepertoireTexte) : '';
+
+// Nos valeurs
+const nosValeursTitre = leCoeur?.fields?.nosValeursTitre;
+const valeur1 = leCoeur?.fields?.valeur1;
+const valeur1Desc = leCoeur?.fields?.valeur1Description ? documentToHtmlString(leCoeur.fields.valeur1Description as Document) : '';
+const valeur2 = leCoeur?.fields?.valeur2;
+const valeur2Desc = leCoeur?.fields?.valeur2Description ? documentToHtmlString(leCoeur.fields.valeur2Description as Document) : '';
+const valeur3 = leCoeur?.fields?.valeur3;
+const valeur3Desc = leCoeur?.fields?.valeur3Description ? documentToHtmlString(leCoeur.fields.valeur3Description as Document) : '';
+
+// Cheffe de chœur
+const chefDeChoeurTitre = leCoeur?.fields?.chefDeChoeurTitre;
+
+const chefDeChoeurTexte = leCoeur?.fields?.chefDeChoeurTexte as Document;
+const chefDeChoeurTexteHtml = chefDeChoeurTexte ? documentToHtmlString(chefDeChoeurTexte) : '';
+
+const chefDeChoeurPhoto = leCoeur?.fields?.chefDeChoeurPhoto as ContentfulAssetField | undefined;
+const chefDeChoeurPhotoUrl = chefDeChoeurPhoto?.fields?.file?.url + '?w=1400&q=100&fm=webp';
+const chefDeChoeurPhotoAlt = chefDeChoeurPhoto?.fields?.title || '';
+
+const listeAnciensChefsTitre = leCoeur?.fields?.listeAnciensChefsTitre;
+const listeAnciensChefsNoms = leCoeur?.fields?.listeAnciensCheffesNoms as Array<string>;
+---
+
+<Layout title="Présentation du chœur Cassiopée, Lyon - Chorale de jeunes">
+	<div class="container">
+		<h1>Le Chœur <strong>Cassiopée</strong></h1>
+    <section class="presentation-section">
+        <div class="presentation-section__text">
+          <Fragment set:html={presentationHtml} />
+        </div>
+        <img class="presentation-section__image" src={`https:${photoUrl}`} alt={photoAlt} />
+    </section>
+    <section class="repertoire-section">
+      <h2>{notreRepertoireTitre}</h2>
+      <div class="repertoire-section__text">
+        <Fragment set:html={notreRepertoireTexteHtml} />
+      </div>
+    </section>
+    <section class="nos-valeurs-section">
+      <h2 class="nos-valeurs-section__title">{nosValeursTitre}</h2>
+      <ol class="nos-valeurs-section__list">
+        <li>
+          <h3 class="value">{valeur1}</h3>
+          <div class="test">
+            <Fragment set:html={valeur1Desc} />
+          </div>
+        </li>
+        <li>
+          <h3 class="value">{valeur2}</h3>
+          <div class="test">
+            <Fragment set:html={valeur2Desc} />
+          </div>
+        </li>
+        <li>
+          <h3 class="value">{valeur3}</h3>
+          <div class="test">
+            <Fragment set:html={valeur3Desc} />
+          </div>
+        </li>
+      </ol>
+    </section>
+    <section class="chef-section">
+      <h2 class="chef-section__title">{chefDeChoeurTitre}</h2>
+      <div class="chef-section__content">
+        <div class="chef-section__text">
+          <Fragment set:html={chefDeChoeurTexteHtml} />
+        </div>
+        <img class="chef-section__image" src={`https:${chefDeChoeurPhotoUrl}`} alt={chefDeChoeurPhotoAlt} />
+      </div>
+    </section>
+    <section class="anciens-chefs-section">
+      <h2 class="anciens-chef-section__title">{listeAnciensChefsTitre}</h2>
+      <ol class="anciens-chef-section__list">
+        {
+          listeAnciensChefsNoms.map((name) => <li>{name}</li>)
+        }
+      </ol>
+    </section>
+	</div>
+</Layout>
+
+<style>
+	.container {
+		margin: auto;
+		padding: 1rem;
+		width: 100%;
+		max-width: 1200px;
+	}
+</style>

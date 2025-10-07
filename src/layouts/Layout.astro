@@ -1,0 +1,84 @@
+---
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+interface Props {
+	title?: string;
+}
+
+const { title = "Cassiopée Astro" } = Astro.props;
+---
+
+<!doctype html>
+<html lang="fr">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="generator" content={Astro.generator} />
+		<title>{title}</title>
+	</head>
+	<body>
+		<Header />
+		<main>
+			<slot />
+		</main>
+		<Footer />
+	</body>
+</html>
+
+<style is:global>
+@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300..700;1,300..700&family=Quicksand:wght@300..700&display=swap");
+
+:root {
+	--c-beige: #f3ece4;
+	--c-orange: #aa603d;
+	--c-vert: #56704d;
+	--c-taupe: #ae8d6a;
+	--c-bleu: #6d7f8e;
+}
+
+html {
+	font-family: "Quicksand", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: normal;
+  font-size: 1.125rem;
+	background-color: var(--c-beige);
+}
+
+body {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	min-height: 100vh;
+	margin: 0;
+}
+
+main {
+	flex: 1;
+}
+
+/* Global link */
+.c-global-link {
+  position: relative;
+  display: inline-block;
+  margin-left: 1.5em;
+  color: #333;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  border-bottom: 2px dotted var(--c-orange);
+  text-decoration: none;
+}
+
+.c-global-link::before {
+  content: "";
+  position: absolute;
+  top: 0.25em;
+  right: calc(100% + 0.5em);
+  width: 0.75em;
+  height: 0.75em;
+  border-radius: 50%;
+  background-color: var(--c-orange);
+}
+</style>

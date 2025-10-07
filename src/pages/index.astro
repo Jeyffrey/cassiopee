@@ -1,0 +1,253 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { contentfulClient } from '../lib/contentful';
+import type { Document } from '@contentful/rich-text-types';
+import { documentToHtmlString } from '@contentful/rich-text-html-renderer';
+import type { ContentfulAssetField } from '../types/contentful';
+
+const entries = await contentfulClient.getEntries({
+  content_type: 'accueil'
+});
+
+const accueil = entries.items[0];
+
+// Bannière
+const banniereImage = accueil?.fields?.banniereImage as ContentfulAssetField | undefined;
+const banniereImageUrl = banniereImage?.fields?.file?.url + '?w=1400&q=100&fm=webp';
+const banniereImageAlt = banniereImage?.fields?.title || 'Image de bannière';
+
+const banniereTexte = accueil?.fields?.banniereTexte as Document;
+const banniereTexteHtml = banniereTexte ? documentToHtmlString(banniereTexte) : '';
+
+// Présentation
+const presentation = accueil?.fields?.presentation as Document;
+const presentationHtml = presentation ? documentToHtmlString(presentation) : '';
+
+// Vidéos youtube
+const videos = (accueil?.fields?.idVideoYoutube as string[]) || [];
+
+// Photo
+const photo = accueil?.fields?.photo as ContentfulAssetField | undefined;
+const photoUrl = photo?.fields?.file?.url + '?w=1400&q=100&fm=webp';
+const photoAlt = photo?.fields?.title || 'Image de bannière';
+---
+
+<Layout title="Chœur Cassiopée, Lyon - Chorale de jeunes">
+	<div class="container">
+		<div class="banner">
+			<h1 class="banner__titre" set:html={banniereTexteHtml} />
+			{banniereImageUrl && (
+				<img class="banner__image" src={`https:${banniereImageUrl}`} alt={banniereImageAlt} />
+			)}
+		</div>
+
+		<div class="wave-separator">
+      <svg
+        data-name="Layer 1"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 1200 120"
+        preserveAspectRatio="none"
+      >
+        <path
+          d="M985.66,92.83C906.67,72,823.78,31,743.84,14.19c-82.26-17.34-168.06-16.33-250.45.39-57.84,11.73-114,31.07-172,41.86A600.21,600.21,0,0,1,0,27.35V120H1200V95.8C1132.19,118.92,1055.71,111.31,985.66,92.83Z"
+          class="shape-fill"
+        ></path>
+      </svg>
+    </div>
+
+		<section class="presentation-section">
+      <div class="presentation-section__content">
+        <Fragment set:html={presentationHtml} />
+      </div>
+      <a href="/le-choeur" class="presentation-section__link c-global-link">Découvrir le chœur</a>
+      <a href="/nous-rejoindre" class="presentation-section__link c-global-link">Nous rejoindre</a>
+    </section>
+
+    <div class="wave-separator flip">
+      <svg
+        data-name="Layer 1"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 1200 120"
+        preserveAspectRatio="none"
+      >
+        <path
+          d="M985.66,92.83C906.67,72,823.78,31,743.84,14.19c-82.26-17.34-168.06-16.33-250.45.39-57.84,11.73-114,31.07-172,41.86A600.21,600.21,0,0,1,0,27.35V120H1200V95.8C1132.19,118.92,1055.71,111.31,985.66,92.83Z"
+          class="shape-fill"
+        ></path>
+      </svg>
+    </div>
+		
+		{videos.length > 0 && (
+			<section class="videos-section">
+        <ul>
+          {videos.map((videoId: string) => (
+            <li>
+              <iframe
+                src={`https://www.youtube.com/embed/${videoId}`}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen
+              />
+            </li>
+          ))}
+        </ul>
+        <a href="/medias" class="videos-section__link c-global-link">
+          Voir nos photos et vidéos
+        </a>
+			</section>
+		)}
+
+    {photoUrl && (
+      <section class="photo-section">
+        <img src={`https:${photoUrl}`} alt={photoAlt} />
+      </section>
+    )}
+	</div>
+</Layout>
+
+<style>
+/* Banniere */
+.banner {
+  position: relative;
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.banner__titre {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-70%);
+  margin: 0;
+  font-family: "Cormorant Garamond", serif;
+  font-optical-sizing: auto;
+  font-weight: normal;
+  font-style: normal;
+  font-size: 3rem;
+  white-space: pre-line;
+
+  b {
+    font-family: "Quicksand", sans-serif;
+    font-size: 0.875em;
+  }
+
+  b:first-of-type {
+    color: var(--c-orange);
+  }
+  b:nth-of-type(2) {
+    color: var(--c-vert);
+  }
+  b:nth-of-type(3) {
+    color: var(--c-taupe);
+  }
+  b:nth-of-type(4) {
+    color: var(--c-bleu);
+  }
+}
+
+.banner__image {
+  display: block;
+  width: 48%;
+  margin-left: auto;
+}
+
+.wave-separator {
+  position: relative;
+  z-index: -1;
+  margin-top: -10rem;
+  width: 100vw;
+  line-height: 0;
+  overflow: hidden;
+
+  svg {
+    position: relative;
+    left: -87%;
+    display: block;
+    width: calc(189%);
+    height: 180px;
+  }
+
+  .shape-fill {
+    fill: #ffffff;
+  }
+}
+
+.wave-separator.flip {
+  margin-top: 0;
+  transform: scaleY(-1);
+
+  svg {
+    width: calc(230%);
+    height: 140px;
+  }
+}
+
+/* DESCRIPTION */
+.presentation-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-block: 4rem 2rem;
+  background-color: #fff; 
+}
+
+.presentation-section__content {
+  max-width: 800px;
+  font-family: "Cormorant Garamond", serif;
+  font-size: 1.5rem;
+  text-align: center;
+  line-height: 2;
+  text-wrap: pretty;
+  white-space: pre-line;
+}
+
+.presentation-section__link {
+  margin-top: 2rem;
+}
+
+/* VIDEOS */
+.videos-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 auto;
+  padding: 4rem 2rem;
+
+  ul {
+    display: flex;
+    gap: 2rem;
+    width: min(1600px, 100%);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  li {
+    flex: 1;
+    border-radius: 1.5rem;
+    overflow: hidden;
+  }
+
+  iframe {
+    display: block;
+    height: 100%;
+    width: 100%;
+    border: none;
+    aspect-ratio: 16 / 9;
+  }  
+}
+
+.videos-section__link {
+  margin-top: 3rem;
+}
+
+/* PHOTO */
+.photo-section {
+  padding: 2rem;
+
+  img {
+    display: block;
+    width: min(100%, 1000px);
+    margin: 0 auto;
+  }
+}
+</style>
