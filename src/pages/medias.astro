@@ -1,30 +1,161 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import Lightbox from '../components/Lightbox.astro';
+import { contentfulClient } from '../lib/contentful';
+import type { ContentfulAssetField } from '../types/contentful';
+
+const entries = await contentfulClient.getEntries({
+  content_type: 'medias',
+});
+
+const titre = entries.items[0].fields.title as string;
+const mediaArray = entries.items[0].fields.media as ContentfulAssetField[];
+const images = mediaArray.map((media) => ({
+  url: media.fields?.file?.url,
+  alt: media.fields?.title || titre,
+}));
 ---
 
 <Layout title="Médias | Cassiopée Astro">
   <div class="container">
-    <h1>Médias</h1>
+    <h1 class="c-global-title">{titre}</h1>
+
+    <div class="youtube-banner">
+      <p>Retrouvez toutes nos vidéos sur notre chaîne YouTube</p>
+      <a
+        href="https://www.youtube.com/c/ChoeurCassiop%C3%A9e/videos"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="c-global-link"
+      >
+        Voir notre chaîne YouTube
+      </a>
+    </div>
+
+    <section class="media-section">
+      <h2 class="media-section__title">{mediaArray.titre}</h2>
+      <div class="media-gallery">
+        {
+          images.map(
+            (image) =>
+              image.url && (
+                <button
+                  class="media-gallery__item"
+                  data-image={`https:${image.url}?w=1400&q=90&fm=webp`}
+                  data-alt={image.alt}
+                >
+                  <img
+                    src={`https:${image.url}?w=600&q=80&fm=webp`}
+                    alt={image.alt}
+                    loading="lazy"
+                  />
+                </button>
+              )
+          )
+        }
+      </div>
+    </section>
   </div>
+
+  <Lightbox />
 </Layout>
 
 <style>
   .container {
     margin: auto;
-    padding: 1rem;
+    padding: 2rem;
     width: 100%;
-    max-width: 1200px;
+    max-width: 1400px;
   }
 
-  h1 {
-    font-size: 3rem;
-    font-weight: 700;
-    line-height: 1;
-    margin-bottom: 1em;
-    background-image: var(--accent-gradient);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-size: 400%;
-    background-position: 0%;
+  .c-global-title {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  .youtube-banner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 2rem;
+    margin-bottom: 3rem;
+    background-color: var(--c-beige-light);
+    border-radius: 1rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+    p {
+      margin: 0;
+      font-size: 1.25rem;
+      text-align: center;
+      color: #333;
+    }
+  }
+
+  .media-section {
+    margin-bottom: 4rem;
+
+    &:last-child {
+      margin-bottom: 2rem;
+    }
+  }
+
+  .media-section__title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--c-orange);
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+
+  .media-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .media-gallery__item {
+    position: relative;
+    overflow: hidden;
+    border-radius: 0.5rem;
+    background-color: var(--c-beige-light);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition:
+      transform 0.3s ease,
+      box-shadow 0.3s ease;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    width: 100%;
+
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    &:focus {
+      outline: 2px solid var(--c-orange);
+      outline-offset: 4px;
+    }
+
+    img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      aspect-ratio: 4 / 3;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .container {
+      padding: 1rem;
+    }
+
+    .media-gallery {
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 1rem;
+    }
   }
 </style>
