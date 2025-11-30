@@ -1,13 +1,14 @@
 ---
 const pathname = Astro.url.pathname;
+const base = import.meta.env.BASE_URL;
 
 const navigation = [
-  { label: 'Accueil', href: '/' },
-  { label: 'Le Chœur', href: '/le-choeur' },
-  { label: 'Concerts', href: '/concerts' },
-  { label: 'Médias', href: '/medias' },
-  { label: 'Nous Rejoindre', href: '/nous-rejoindre' },
-  { label: 'Contact', href: '/contact' },
+  { label: 'Accueil', href: `${base}/` },
+  { label: 'Le Chœur', href: `${base}/le-choeur` },
+  { label: 'Concerts', href: `${base}/concerts` },
+  { label: 'Médias', href: `${base}/medias` },
+  { label: 'Nous Rejoindre', href: `${base}/nous-rejoindre` },
+  { label: 'Contact', href: `${base}/contact` },
 ];
 ---
 
@@ -16,7 +17,7 @@ const navigation = [
     <ul class="main-header__menu-list">
       <li>
         <a href={navigation[0].href} title={navigation[0].label}>
-          <img src="/logo-cassiopee.png" alt="Logo Cassiopée" />
+          <img src={`${base}/logo-cassiopee.png`} alt="Logo Cassiopée" />
         </a>
       </li>
       <li>

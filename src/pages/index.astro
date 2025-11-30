@@ -31,6 +31,8 @@ const videos = (accueil?.fields?.idVideoYoutube as string[]) || [];
 const photo = accueil?.fields?.photo as ContentfulAssetField | undefined;
 const photoUrl = photo?.fields?.file?.url + '?w=1400&q=100&fm=webp';
 const photoAlt = photo?.fields?.title || 'Image de bannière';
+
+const base = import.meta.env.BASE_URL;
 ---
 
 <Layout title="Chœur Cassiopée, Lyon - Chorale de jeunes">
@@ -50,8 +52,8 @@ const photoAlt = photo?.fields?.title || 'Image de bannière';
       <div class="presentation-section__content">
         <Fragment set:html={presentationHtml} />
       </div>
-      <a href="/le-choeur" class="presentation-section__link c-global-link">Découvrir le chœur</a>
-      <a href="/nous-rejoindre" class="presentation-section__link c-global-link">Nous rejoindre</a>
+      <a href={`${base}/le-choeur`} class="presentation-section__link c-global-link">Découvrir le chœur</a>
+      <a href={`${base}/nous-rejoindre`} class="presentation-section__link c-global-link">Nous rejoindre</a>
     </section>
 
     <WaveSeparator flip />
@@ -70,7 +72,7 @@ const photoAlt = photo?.fields?.title || 'Image de bannière';
               </li>
             ))}
           </ul>
-          <a href="/medias" class="videos-section__link c-global-link">
+          <a href={`${base}/medias`} class="videos-section__link c-global-link">
             Voir nos photos et vidéos
           </a>
         </section>
