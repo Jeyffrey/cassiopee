@@ -5,7 +5,7 @@ import tsPlugin from '@typescript-eslint/eslint-plugin';
 export default [
   ...eslintPluginAstro.configs.recommended,
   {
-    files: ['**/*.{js,mjs,cjs,ts,tsx,astro}'],
+    files: ['**/*.{js,mjs,cjs,ts,tsx}'],
     languageOptions: {
       parser: tsParser,
       parserOptions: {
