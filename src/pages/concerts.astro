@@ -14,9 +14,6 @@ const now = new Date();
 const upcomingConcerts = allConcerts
   .filter((concert) => new Date(concert.date as string) >= now)
   .sort((a, b) => new Date(a.date as string).getTime() - new Date(b.date as string).getTime());
-const pastConcerts = allConcerts
-  .filter((concert) => new Date(concert.date as string) < now)
-  .sort((a, b) => new Date(b.date as string).getTime() - new Date(a.date as string).getTime());
 
 const getDate = (dateString: string) => {
   const date = new Date(dateString);
@@ -62,19 +59,28 @@ const getTime = (dateString: string) => {
         <ol class="concerts__list">
           {upcomingConcerts.map((concert) => (
             <li>
-              <h2 class="title">{concert.titre}</h2>
-              <p class="date">
-                <strong>{getDate(concert.date as string)}</strong>
-                <span>{getTime(concert.date as string)}</span>
-              </p>
-              <div class="place c-global-text-container">
-                <Fragment set:html={documentToHtmlString(concert.lieu as Document)} />
-              </div>
-              {concert.texte && (
-                <div class="text c-global-text-container">
-                  <Fragment set:html={documentToHtmlString(concert.texte as Document)} />
+              <div class="infos c-global-text-container">
+                <div class="date">
+                  <strong>Date</strong>
+                  <span>{getDate(concert.date as string)}</span>
                 </div>
-              )}
+                <div class="hour">
+                  <strong>Heure</strong>
+                  <span>{getTime(concert.date as string)}</span>
+                </div>
+                <div class="place c-global-text-container">
+                  <strong>Lieu</strong>
+                  <Fragment set:html={documentToHtmlString(concert.lieu as Document)} />
+                </div>
+              </div>
+              <div class="content">
+                <h2 class="title c-global-title">{concert.titre}</h2>
+                {concert.texte && (
+                  <div class="text c-global-text-container">
+                    <Fragment set:html={documentToHtmlString(concert.texte as Document)} />
+                  </div>
+                )}
+              </div>
             </li>
           ))}
         </ol>
@@ -82,39 +88,12 @@ const getTime = (dateString: string) => {
         <p>Il n'y a pas encore de concerts à venir</p>
       )
     }
-
-    {
-      pastConcerts.length > 0 && (
-        <>
-          <h2 class="concerts__sub-title concerts__sub-title--old">Concerts passés</h2>
-          <ol class="concerts__list concerts__list--old">
-            {pastConcerts.map((concert) => (
-              <li>
-                <h2 class="title">{concert.titre}</h2>
-                <p class="date">
-                  <strong>{getDate(concert.date as string)}</strong>
-                  <span>{getTime(concert.date as string)}</span>
-                </p>
-                <div class="place c-global-text-container">
-                  <Fragment set:html={documentToHtmlString(concert.lieu as Document)} />
-                </div>
-                {concert.texte && (
-                  <div class="text c-global-text-container">
-                    <Fragment set:html={documentToHtmlString(concert.texte as Document)} />
-                  </div>
-                )}
-              </li>
-            ))}
-          </ol>
-        </>
-      )
-    }
   </section>
 </Layout>
 
 <style>
   .concerts {
-    max-width: 800px;
+    max-width: 1300px;
   }
 
   .concerts__main-title {
@@ -123,22 +102,25 @@ const getTime = (dateString: string) => {
   }
 
   .concerts__sub-title {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-block: 2rem;
     text-align: center;
-    font-size: 1.25rem;
+    font-size: 1rem;
+    font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.2em;
-    color: var(--c-vert);
+    color: rgba(0, 0, 0, 0.6);
   }
-  .concerts__sub-title--old {
-    color: var(--c-bleu);
-
-    &::before {
-      content: '';
-      display: block;
-      width: 5rem;
-      margin: 3rem auto;
-      border-top: 2px dotted var(--c-bleu);
-    }
+  .concerts__sub-title::before {
+    content: '';
+    width: 0.5em;
+    height: 0.5em;
+    margin-right: 0.75em;
+    border-radius: 50%;
+    background-color: var(--c-orange);
   }
 
   .concerts__list {
@@ -146,45 +128,56 @@ const getTime = (dateString: string) => {
     list-style: none;
 
     li {
-      margin-top: 1.5rem;
-      padding: 1.5rem 2rem;
+      display: flex;
+      gap: 3rem;
+      align-items: flex-start;
+      margin-top: 2rem;
+      padding: 3rem;
       background-color: white;
-      border-radius: 1.5rem;
+      border-radius: 5rem;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
     }
 
-    .title {
-      margin-block: 0 1rem;
-      font-size: 1.125rem;
-      color: var(--c-vert);
-    }
+    .infos {
+      flex: 1;
+      padding: 1.5rem;
+      border-radius: 2.5rem;
+      background-color: var(--c-beige-light);
+      border: 1px solid var(--c-beige);
 
-    .date {
-      margin: 0;
-      padding: 0.5em 0 0.5em 1em;
-      line-height: 1.5;
-      border: 2px dotted var(--c-taupe);
+      & > div + div {
+        margin-top: 1rem;
+      }
 
       strong {
         display: block;
-        font-size: 1.125rem;
-        font-weight: 600;
-        color: var(--c-taupe);
+        color: var(--c-rouge);
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        font-size: 0.875rem;
+        font-weight: 500;
+      }
+
+      .date {
+        margin: 0;
+      }
+
+      .place {
+        white-space: pre-line;
+
+        p:first-of-type {
+          margin-top: 0;
+        }
       }
     }
 
-    .place {
-      padding: 0.5em 0 0.5em 1em;
-      white-space: pre-line;
-      border: 2px dotted var(--c-taupe);
-      border-top: none;
+    .content {
+      flex: 3;
 
-      & > :first-child {
-        margin-top: 0;
+      .title {
+        font-size: 2rem;
+        color: var(--c-rouge);
       }
-    }
-
-    .text {
-      opacity: 0.75;
     }
   }
 
