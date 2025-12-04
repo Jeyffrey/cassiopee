@@ -250,4 +250,57 @@ const listeAnciensChefsNoms = leCoeur?.fields?.listeAnciensCheffesNoms as Array<
       }
     }
   }
+
+  @media (max-width: 980px) {
+    /* PRÉSENTATION */
+    .presentation-section {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+      padding-bottom: 1rem;
+    }
+
+    .presentation-section__text {
+      order: -1;
+    }
+
+    .presentation-section__image {
+      width: min(700px, 100%);
+      margin: 0 auto;
+    }
+
+    /* NOS VALEURS */
+    .nos-valeurs-section__list {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+
+    /* CHEF(FE) DE CHOEUR */
+    .chef-section__content {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+      padding-block: 2rem;
+    }
+
+    .chef-section__image {
+      max-width: 300px;
+      margin: 0 auto;
+    }
+
+    /* ANCIENS CHEFS */
+    .anciens-chefs-section {
+      padding-bottom: 0;
+
+      &::after {
+        content: '';
+        display: block;
+        width: 5rem;
+        margin: 3rem auto 0;
+        border-top: 2px dotted var(--c-bleu);
+      }
+    }
+
+    .anciens-chefs-section__title {
+      font-size: 1.5rem;
+    }
+  }
 </style>
