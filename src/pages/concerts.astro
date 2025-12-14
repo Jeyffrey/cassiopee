@@ -82,6 +82,28 @@ const getTime = (dateString: string) => {
                     <strong>Lieu</strong>
                     <Fragment set:html={documentToHtmlString(concert.lieu as Document)} />
                   </div>
+                  {concert.lien && (
+                    <div class="link">
+                      <a href={concert.lien as string} target="_blank" rel="noopener noreferrer">
+                        <span>Lien de l'événement</span>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="16"
+                          height="16"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        >
+                          <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                          <polyline points="15 3 21 3 21 9" />
+                          <line x1="10" y1="14" x2="21" y2="3" />
+                        </svg>
+                      </a>
+                    </div>
+                  )}
                 </div>
                 <div class="content">
                   <h2 class="title c-global-title">{concert.titre}</h2>
@@ -167,6 +189,25 @@ const getTime = (dateString: string) => {
 
         p:first-of-type {
           margin-top: 0;
+        }
+      }
+
+      .link a {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.25rem;
+        margin-top: 1rem;
+        color: var(--c-rouge);
+        font-weight: 500;
+
+        &:hover {
+          text-decoration: none;
+        }
+
+        svg {
+          display: block;
+          height: 1rem;
+          flex-shrink: 0;
         }
       }
     }
