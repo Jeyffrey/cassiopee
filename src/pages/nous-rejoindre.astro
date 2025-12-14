@@ -1,30 +1,136 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { contentfulClient } from '../lib/contentful';
+import type { Document } from '@contentful/rich-text-types';
+import { documentToHtmlString } from '@contentful/rich-text-html-renderer';
+import type { ContentfulAssetField } from '../types/contentful';
+import WaveSeparator from '../components/WaveSeparator.astro';
+
+const entries = await contentfulClient.getEntries({
+  content_type: 'nousRejoindre',
+});
+
+const nousRejoindre = await entries.items[0];
+
+const introduction = nousRejoindre?.fields?.introduction as Document;
+const introductionHtml = introduction ? documentToHtmlString(introduction) : '';
+
+const photo = nousRejoindre?.fields?.visuel as ContentfulAssetField | undefined;
+const photoUrl = photo?.fields?.file?.url + '?w=1400&q=100&fm=webp';
+const photoAlt = photo?.fields?.title || 'Image de bannière';
+
+const auditionTitre = nousRejoindre?.fields?.auditionTitre;
+const audition = nousRejoindre?.fields?.audition as Document;
+const auditionHtml = audition ? documentToHtmlString(audition) : '';
+
+const repetitionsTitre = nousRejoindre?.fields?.repetitionsTitre;
+const repetitions = nousRejoindre?.fields?.repetitions as Document;
+const repetitionsHtml = repetitions ? documentToHtmlString(repetitions) : '';
+
+const cotisationTitre = nousRejoindre?.fields?.cotisationTitre;
+const cotisation = nousRejoindre?.fields?.cotisation as Document;
+const cotisationHtml = cotisation ? documentToHtmlString(cotisation) : '';
 ---
 
-<Layout title="Nous Rejoindre | Cassiopée Astro">
-  <div class="container">
-    <h1>Nous Rejoindre</h1>
-  </div>
+<Layout title="Rejoindre le chœur Cassiopée, Lyon - Chorale de jeunes">
+  <section class="introduction-section c-global-container">
+    <div class="introduction-section__text">
+      <h1 class="introduction-section__title c-global-title">
+        Rejoindre <b>Cassiopée</b>
+      </h1>
+      <div class="c-global-text-container">
+        <Fragment set:html={introductionHtml} />
+      </div>
+    </div>
+    <img class="introduction-section__image" src={`https:${photoUrl}`} alt={photoAlt} />
+  </section>
+  <WaveSeparator />
+  <section class="infos-section">
+    <div class="c-global-container">
+      <h2 class="infos-section__title c-global-title">{auditionTitre}</h2>
+      <div class="infos-section__text c-global-text-container">
+        <Fragment set:html={auditionHtml} />
+      </div>
+    </div>
+    <div class="c-global-container">
+      <h2 class="infos-section__title c-global-title">{repetitionsTitre}</h2>
+      <div class="infos-section__text c-global-text-container">
+        <Fragment set:html={repetitionsHtml} />
+      </div>
+    </div>
+    <div class="c-global-container">
+      <h2 class="infos-section__title c-global-title">{cotisationTitre}</h2>
+      <div class="infos-section__text c-global-text-container">
+        <Fragment set:html={cotisationHtml} />
+      </div>
+    </div>
+  </section>
+  <WaveSeparator flip />
 </Layout>
 
 <style>
-  .container {
-    margin: auto;
-    padding: 1rem;
-    width: 100%;
-    max-width: 1200px;
+  /* PRÉSENTATION */
+  .introduction-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: 3rem;
+    padding-bottom: 2rem;
   }
 
-  h1 {
-    font-size: 3rem;
-    font-weight: 700;
-    line-height: 1;
-    margin-bottom: 1em;
-    background-image: var(--accent-gradient);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-size: 400%;
-    background-position: 0%;
+  .introduction-section__title b {
+    color: var(--c-orange);
+  }
+
+  .introduction-section__image {
+    width: 100%;
+    clip-path: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg"><defs><clipPath id="blob" clipPathUnits="objectBoundingBox"><path d="M 0.55,0.02 C 0.3,0 0.15,0.08 0.04,0.28 C -0.02,0.48 0.02,0.65 0.06,0.78 C 0.08,0.92 0.18,1 0.38,0.98 C 0.58,0.95 0.75,1.02 0.92,0.94 C 0.98,0.86 1.02,0.68 0.97,0.5 C 0.94,0.32 0.85,0.12 0.55,0.02 Z"/></clipPath></defs></svg>#blob');
+  }
+
+  /* Infos */
+  .infos-section {
+    background-color: white;
+
+    & > div {
+      max-width: 900px;
+    }
+
+    & > div + div::before {
+      content: '';
+      display: block;
+      width: 5rem;
+      margin: 2rem auto;
+      border-top: 2px dotted var(--c-bleu);
+    }
+
+    & > div:nth-child(1) .infos-section__title {
+      color: var(--c-bleu);
+    }
+
+    & > div:nth-child(2) .infos-section__title {
+      color: var(--c-taupe);
+    }
+
+    & > div:nth-child(3) .infos-section__title {
+      color: var(--c-vert);
+    }
+  }
+
+  @media (max-width: 980px) {
+    /* PRÉSENTATION */
+    .introduction-section {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+      padding-bottom: 1rem;
+    }
+
+    .introduction-section__text {
+      order: -1;
+    }
+
+    .introduction-section__image {
+      width: min(700px, 100%);
+      margin: 0 auto;
+    }
   }
 </style>

@@ -25,45 +25,40 @@ const navigation = [
     <ul class="main-header__menu-list">
       <li>
         <a
-          class="main-header__menu-link"
+          class={`main-header__menu-link ${pathname === navigation[1].href ? 'active' : ''}`}
           href={navigation[1].href}
-          class={pathname === navigation[1].href ? 'active' : ''}
         >
           {navigation[1].label}
         </a>
       </li>
       <li>
         <a
-          class="main-header__menu-link"
+          class={`main-header__menu-link ${pathname === navigation[2].href ? 'active' : ''}`}
           href={navigation[2].href}
-          class={pathname === navigation[2].href ? 'active' : ''}
         >
           {navigation[2].label}
         </a>
       </li>
       <li>
         <a
-          class="main-header__menu-link"
+          class={`main-header__menu-link ${pathname === navigation[3].href ? 'active' : ''}`}
           href={navigation[3].href}
-          class={pathname === navigation[3].href ? 'active' : ''}
         >
           {navigation[3].label}
         </a>
       </li>
       <li>
         <a
-          class="main-header__menu-link"
+          class={`main-header__menu-link ${pathname === navigation[4].href ? 'active' : ''}`}
           href={navigation[4].href}
-          class={pathname === navigation[4].href ? 'active' : ''}
         >
           {navigation[4].label}
         </a>
       </li>
       <li>
         <a
-          class="main-header__menu-link"
+          class={`main-header__menu-link ${pathname === navigation[5].href ? 'active' : ''}`}
           href={navigation[5].href}
-          class={pathname === navigation[5].href ? 'active' : ''}
         >
           {navigation[5].label}
         </a>
@@ -98,7 +93,7 @@ const navigation = [
   .main-header__menu-list {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: 1.5rem;
     margin: 0;
     padding-left: 0;
     list-style: none;
@@ -121,6 +116,11 @@ const navigation = [
 
     &:hover {
       color: var(--c-orange);
+    }
+
+    &.active {
+      color: var(--c-orange);
+      font-weight: bold;
     }
   }
 

@@ -58,9 +58,11 @@ const listeAnciensChefsNoms = leCoeur?.fields?.listeAnciensCheffesNoms as Array<
 
 <Layout title="Présentation du chœur Cassiopée, Lyon - Chorale de jeunes">
   <section class="presentation-section c-global-container">
-    <div class="presentation-section__text c-global-text-container">
+    <div class="presentation-section__text">
       <h1 class="presentation-section__title c-global-title">Le Chœur <b>Cassiopée</b></h1>
-      <Fragment set:html={presentationHtml} />
+      <div class="c-global-text-container">
+        <Fragment set:html={presentationHtml} />
+      </div>
     </div>
     <img class="presentation-section__image" src={`https:${photoUrl}`} alt={photoAlt} />
   </section>
