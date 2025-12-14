@@ -3,6 +3,7 @@ import Layout from '../layouts/Layout.astro';
 import { contentfulClient } from '../lib/contentful';
 import type { Document } from '@contentful/rich-text-types';
 import { documentToHtmlString } from '@contentful/rich-text-html-renderer';
+import type { ContentfulAssetField } from '../types/contentful';
 
 const entries = await contentfulClient.getEntries({
   content_type: 'concert',
@@ -31,12 +32,14 @@ const getDate = (dateString: string) => {
     'novembre',
     'décembre',
   ];
+  const frenchDays = ['dim.', 'lun.', 'mar.', 'mer.', 'jeu.', 'ven.', 'sam.'];
 
+  const dayOfWeek = frenchDays[date.getDay()];
   const day = date.getDate();
   const month = frenchMonths[date.getMonth()];
   const year = date.getFullYear();
 
-  return `${day} ${month} ${year}`;
+  return `${dayOfWeek} ${day} ${month} ${year}`;
 };
 
 const getTime = (dateString: string) => {
@@ -51,38 +54,47 @@ const getTime = (dateString: string) => {
 
 <Layout title="Concerts du chœur Cassiopée, Lyon - Chorale de jeunes">
   <section class="concerts c-global-container">
-    <h1 class="concerts__main-title c-global-title">Nos concerts</h1>
+    <h1 class="concerts__main-title c-global-title">Nos prochains <b>concerts</b></h1>
 
-    <h2 class="concerts__sub-title">Concerts à venir</h2>
     {
       upcomingConcerts.length > 0 ? (
         <ol class="concerts__list">
-          {upcomingConcerts.map((concert) => (
-            <li>
-              <div class="infos c-global-text-container">
-                <div class="date">
-                  <strong>Date</strong>
-                  <span>{getDate(concert.date as string)}</span>
-                </div>
-                <div class="hour">
-                  <strong>Heure</strong>
-                  <span>{getTime(concert.date as string)}</span>
-                </div>
-                <div class="place c-global-text-container">
-                  <strong>Lieu</strong>
-                  <Fragment set:html={documentToHtmlString(concert.lieu as Document)} />
-                </div>
-              </div>
-              <div class="content">
-                <h2 class="title c-global-title">{concert.titre}</h2>
-                {concert.texte && (
-                  <div class="text c-global-text-container">
-                    <Fragment set:html={documentToHtmlString(concert.texte as Document)} />
+          {upcomingConcerts.map((concert) => {
+            const visuel = concert.visuel as ContentfulAssetField | undefined;
+            const visuelUrl = visuel?.fields?.file?.url
+              ? `https:${visuel.fields.file.url}?w=1200&q=80&fm=webp`
+              : null;
+            const visuelAlt =
+              visuel?.fields?.title || (concert.titre as string) || 'Visuel du concert';
+
+            return (
+              <li>
+                <div class="infos c-global-text-container">
+                  <div class="date">
+                    <strong>Date</strong>
+                    <span>{getDate(concert.date as string)}</span>
                   </div>
-                )}
-              </div>
-            </li>
-          ))}
+                  <div class="hour">
+                    <strong>Heure</strong>
+                    <span>{getTime(concert.date as string)}</span>
+                  </div>
+                  <div class="place c-global-text-container">
+                    <strong>Lieu</strong>
+                    <Fragment set:html={documentToHtmlString(concert.lieu as Document)} />
+                  </div>
+                </div>
+                <div class="content">
+                  <h2 class="title c-global-title">{concert.titre}</h2>
+                  {concert.texte && (
+                    <div class="text c-global-text-container">
+                      <Fragment set:html={documentToHtmlString(concert.texte as Document)} />
+                    </div>
+                  )}
+                  {visuelUrl && <img class="visuel" src={visuelUrl} alt={visuelAlt} />}
+                </div>
+              </li>
+            );
+          })}
         </ol>
       ) : (
         <p>Il n'y a pas encore de concerts à venir</p>
@@ -97,30 +109,12 @@ const getTime = (dateString: string) => {
   }
 
   .concerts__main-title {
-    margin-bottom: 3rem;
+    margin-bottom: 4rem;
     text-align: center;
-  }
 
-  .concerts__sub-title {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-block: 2rem;
-    text-align: center;
-    font-size: 1rem;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.2em;
-    color: rgba(0, 0, 0, 0.6);
-  }
-  .concerts__sub-title::before {
-    content: '';
-    width: 0.5em;
-    height: 0.5em;
-    margin-right: 0.75em;
-    border-radius: 50%;
-    background-color: var(--c-orange);
+    b {
+      color: var(--c-rouge);
+    }
   }
 
   .concerts__list {
@@ -131,19 +125,16 @@ const getTime = (dateString: string) => {
       display: flex;
       gap: 3rem;
       align-items: flex-start;
-      margin-top: 2rem;
-      padding: 3rem;
-      background-color: white;
-      border-radius: 5rem;
-      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+    }
+
+    li + li {
+      margin-top: 4rem;
+      padding-top: 4rem;
+      border-top: 2px dotted var(--c-taupe);
     }
 
     .infos {
       flex: 1;
-      padding: 1.5rem;
-      border-radius: 2.5rem;
-      background-color: var(--c-beige-light);
-      border: 1px solid var(--c-beige);
 
       & > div + div {
         margin-top: 1rem;
@@ -178,10 +169,39 @@ const getTime = (dateString: string) => {
         font-size: 2rem;
         color: var(--c-rouge);
       }
+
+      .visuel {
+        display: block;
+        width: 100%;
+        margin-top: 2rem;
+        border-radius: 1rem;
+      }
     }
   }
 
   .concerts__list--old {
     opacity: 0.75;
+  }
+
+  @media (max-width: 980px) {
+    .concerts__list {
+      li {
+        flex-direction: column;
+        gap: 2rem;
+      }
+
+      .content {
+        display: flex;
+        flex-direction: column;
+
+        .title {
+          font-size: 1.5rem;
+        }
+      }
+
+      .infos {
+        order: 2;
+      }
+    }
   }
 </style>
