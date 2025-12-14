@@ -10,6 +10,19 @@ const navigation = [
   { label: 'Nous Rejoindre', href: `${base}/nous-rejoindre` },
   { label: 'Contact', href: `${base}/contact` },
 ];
+
+const isActive = (href: string) => {
+  const cleanPath = pathname.replace(/\/$/, '') || '/';
+  const cleanHref = href.replace(/\/$/, '') || '/';
+
+  // Pour l'accueil, match exact uniquement
+  if (cleanHref === (base || '/')) {
+    return cleanPath === (base || '/');
+  }
+
+  // Pour les autres pages, match si le path commence par le href
+  return cleanPath === cleanHref || cleanPath.startsWith(cleanHref + '/');
+};
 ---
 
 <header class="main-header">
@@ -23,46 +36,16 @@ const navigation = [
       <span></span>
     </button>
     <ul class="main-header__menu-list">
-      <li>
-        <a
-          class={`main-header__menu-link ${pathname === navigation[1].href ? 'active' : ''}`}
-          href={navigation[1].href}
-        >
-          {navigation[1].label}
-        </a>
-      </li>
-      <li>
-        <a
-          class={`main-header__menu-link ${pathname === navigation[2].href ? 'active' : ''}`}
-          href={navigation[2].href}
-        >
-          {navigation[2].label}
-        </a>
-      </li>
-      <li>
-        <a
-          class={`main-header__menu-link ${pathname === navigation[3].href ? 'active' : ''}`}
-          href={navigation[3].href}
-        >
-          {navigation[3].label}
-        </a>
-      </li>
-      <li>
-        <a
-          class={`main-header__menu-link ${pathname === navigation[4].href ? 'active' : ''}`}
-          href={navigation[4].href}
-        >
-          {navigation[4].label}
-        </a>
-      </li>
-      <li>
-        <a
-          class={`main-header__menu-link ${pathname === navigation[5].href ? 'active' : ''}`}
-          href={navigation[5].href}
-        >
-          {navigation[5].label}
-        </a>
-      </li>
+      {navigation.slice(1).map((item) => (
+        <li>
+          <a
+            class={`main-header__menu-link ${isActive(item.href) ? 'active' : ''}`}
+            href={item.href}
+          >
+            {item.label}
+          </a>
+        </li>
+      ))}
     </ul>
   </nav>
 </header>

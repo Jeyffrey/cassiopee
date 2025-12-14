@@ -118,8 +118,17 @@ const getTime = (dateString: string) => {
   }
 
   .concerts__list {
+    margin: 0;
     padding-left: 0;
     list-style: none;
+
+    &::after {
+      content: '';
+      display: block;
+      width: 5rem;
+      margin: 4rem auto 0;
+      border-top: 2px dotted var(--c-taupe);
+    }
 
     li {
       display: flex;
