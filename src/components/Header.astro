@@ -36,16 +36,18 @@ const isActive = (href: string) => {
       <span></span>
     </button>
     <ul class="main-header__menu-list">
-      {navigation.slice(1).map((item) => (
-        <li>
-          <a
-            class={`main-header__menu-link ${isActive(item.href) ? 'active' : ''}`}
-            href={item.href}
-          >
-            {item.label}
-          </a>
-        </li>
-      ))}
+      {
+        navigation.slice(1).map((item) => (
+          <li>
+            <a
+              class={`main-header__menu-link ${isActive(item.href) ? 'active' : ''}`}
+              href={item.href}
+            >
+              {item.label}
+            </a>
+          </li>
+        ))
+      }
     </ul>
   </nav>
 </header>
