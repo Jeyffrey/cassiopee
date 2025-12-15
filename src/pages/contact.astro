@@ -14,7 +14,7 @@ const texteContent = texte ? documentToHtmlString(texte) : '';
 ---
 
 <Layout title="Contact | Cassiopée Astro" pageClass="contact-page">
-  <section class="container">
+  <section class="c-global-container">
     <h1 class="c-global-title">Contact</h1>
     <div class="c-global-text-container">
       <Fragment set:html={texteContent} />
@@ -26,12 +26,6 @@ const texteContent = texte ? documentToHtmlString(texte) : '';
   .contact-page {
     main {
       flex: 0;
-    }
-
-    .container {
-      max-width: 1300px;
-      margin: 0 auto;
-      padding-inline: 1rem;
     }
   }
 </style>

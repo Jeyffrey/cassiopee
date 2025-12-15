@@ -17,7 +17,7 @@ const images = mediaArray.map((media) => ({
 ---
 
 <Layout title="Médias | Cassiopée Astro">
-  <div class="container">
+  <div class="container c-global-container">
     <h1 class="c-global-title">{titre}</h1>
 
     <div class="youtube-banner">
@@ -61,13 +61,6 @@ const images = mediaArray.map((media) => ({
 </Layout>
 
 <style>
-  .container {
-    margin: auto;
-    padding: 2rem;
-    width: 100%;
-    max-width: 1400px;
-  }
-
   .c-global-title {
     text-align: center;
     margin-bottom: 3rem;

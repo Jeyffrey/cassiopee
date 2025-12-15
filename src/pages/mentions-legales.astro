@@ -1,30 +1,88 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { contentfulClient } from '../lib/contentful';
+import type { Document } from '@contentful/rich-text-types';
+import { documentToHtmlString } from '@contentful/rich-text-html-renderer';
+import type { ContentfulAssetField } from '../types/contentful';
+import WaveSeparator from '../components/WaveSeparator.astro';
+
+const entries = await contentfulClient.getEntries({
+  content_type: 'mentionsLegales',
+});
+
+const mentionsLegales = await entries.items[0];
+
+const titre = mentionsLegales?.fields?.titre as string;
+
+const contenu = mentionsLegales?.fields?.contenu as Document;
+const contenuHtml = contenu ? documentToHtmlString(contenu) : '';
 ---
 
-<Layout title="Mentions Légales | Cassiopée Astro">
-  <div class="container">
-    <h1>Mentions Légales</h1>
-  </div>
+<Layout title="Rejoindre le chœur Cassiopée, Lyon - Chorale de jeunes">
+  <h1 class="main-title c-global-title">
+    {titre}
+  </h1>
+  <WaveSeparator />
+  <section class="infos-section">
+    <div class="c-global-container">
+      <div class="infos-section__text c-global-text-container">
+        <Fragment set:html={contenuHtml} />
+      </div>
+    </div>
+  </section>
+  <WaveSeparator flip />
 </Layout>
 
 <style>
-  .container {
-    margin: auto;
-    padding: 1rem;
-    width: 100%;
-    max-width: 1200px;
+  /* PRÉSENTATION */
+  .main-title {
+    text-align: center;
   }
 
-  h1 {
-    font-size: 3rem;
-    font-weight: 700;
-    line-height: 1;
-    margin-bottom: 1em;
-    background-image: var(--accent-gradient);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-size: 400%;
-    background-position: 0%;
+  /* Infos */
+  .infos-section {
+    background-color: white;
+
+    & > div {
+      max-width: 900px;
+    }
+
+    & > div + div::before {
+      content: '';
+      display: block;
+      width: 5rem;
+      margin: 2rem auto;
+      border-top: 2px dotted var(--c-bleu);
+    }
+
+    & > div:nth-child(1) .infos-section__title {
+      color: var(--c-bleu);
+    }
+
+    & > div:nth-child(2) .infos-section__title {
+      color: var(--c-taupe);
+    }
+
+    & > div:nth-child(3) .infos-section__title {
+      color: var(--c-vert);
+    }
+  }
+
+  @media (max-width: 980px) {
+    /* PRÉSENTATION */
+    .introduction-section {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+      padding-bottom: 1rem;
+    }
+
+    .introduction-section__text {
+      order: -1;
+    }
+
+    .introduction-section__image {
+      width: min(700px, 100%);
+      margin: 0 auto;
+    }
   }
 </style>

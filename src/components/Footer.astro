@@ -1,6 +1,7 @@
 ---
 import { contentfulClient } from '../lib/contentful';
-import type { Document } from '@contentful/rich-text-types';
+
+const base = import.meta.env.BASE_URL;
 
 const entries = await contentfulClient.getEntries({
   content_type: 'footer',
@@ -16,12 +17,12 @@ const lienYoutube = footer?.fields?.lienYoutube as string;
 const lienHelloAsso = footer?.fields?.lienHelloAsso as string;
 ---
 
-<footer>
+<footer class="c-global-container">
   <div class="left">
     <div>
       <h3>CHOEUR CASSIOPÉE</h3>
       <p class="adress">{adresse}</p>
-      <a href="#">Mentions légales</a>
+      <a href=`${base}/mentions-legales`>Mentions légales</a>
     </div>
     <div>
       <h3>Téléphone</h3>
@@ -79,9 +80,8 @@ const lienHelloAsso = footer?.fields?.lienHelloAsso as string;
     display: flex;
     justify-content: space-between;
     width: 100%;
-    max-width: 1300px;
     margin: 0 auto;
-    padding: 3rem 1rem;
+    padding-block: 3rem;
     font-size: 0.875rem;
     line-height: 1.6;
 
