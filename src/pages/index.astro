@@ -6,6 +6,8 @@ import { documentToHtmlString } from '@contentful/rich-text-html-renderer';
 import type { ContentfulAssetField } from '../types/contentful';
 import WaveSeparator from '../components/WaveSeparator.astro';
 
+const base = import.meta.env.BASE_URL;
+
 const entries = await contentfulClient.getEntries({
   content_type: 'accueil',
 });
@@ -14,7 +16,8 @@ const accueil = entries.items[0];
 
 // Bannière
 const banniereImage = accueil?.fields?.banniereImage as ContentfulAssetField | undefined;
-const banniereImageUrl = banniereImage?.fields?.file?.url + '?w=1400&q=100&fm=webp';
+const banniereImageBaseUrl = banniereImage?.fields?.file?.url;
+const banniereImageUrl = banniereImageBaseUrl + '?w=1400&q=100&fm=webp';
 const banniereImageAlt = banniereImage?.fields?.title || 'Image de bannière';
 
 const banniereTexte = accueil?.fields?.banniereTexte as Document;
@@ -29,10 +32,9 @@ const videos = (accueil?.fields?.idVideoYoutube as string[]) || [];
 
 // Photo
 const photo = accueil?.fields?.photo as ContentfulAssetField | undefined;
-const photoUrl = photo?.fields?.file?.url + '?w=1400&q=100&fm=webp';
+const photoBaseUrl = photo?.fields?.file?.url;
+const photoUrl = photoBaseUrl + '?w=1400&q=100&fm=webp';
 const photoAlt = photo?.fields?.title || 'Image de bannière';
-
-const base = import.meta.env.BASE_URL;
 ---
 
 <Layout title="Chœur Cassiopée, Lyon - Chorale de jeunes">
@@ -41,7 +43,13 @@ const base = import.meta.env.BASE_URL;
       <h1 class="banner__titre c-global-title" set:html={banniereTexteHtml} />
       {
         banniereImageUrl && (
-          <img class="banner__image" src={`https:${banniereImageUrl}`} alt={banniereImageAlt} />
+          <img
+            class="banner__image"
+            srcset={`https:${banniereImageBaseUrl}?w=800&q=80&fm=webp 800w, https:${banniereImageBaseUrl}?w=1400&q=100&fm=webp 1400w`}
+            sizes="(max-width: 980px) 800px, 1400px"
+            src={`https:${banniereImageUrl}`}
+            alt={banniereImageAlt}
+          />
         )
       }
     </div>
@@ -86,7 +94,12 @@ const base = import.meta.env.BASE_URL;
     {
       photoUrl && (
         <section class="photo-section">
-          <img src={`https:${photoUrl}`} alt={photoAlt} />
+          <img
+            srcset={`https:${photoBaseUrl}?w=800&q=80&fm=webp 800w, https:${photoBaseUrl}?w=1400&q=100&fm=webp 1400w`}
+            sizes="(max-width: 980px) 800px, 1000px"
+            src={`https:${photoUrl}`}
+            alt={photoAlt}
+          />
         </section>
       )
     }
@@ -126,6 +139,7 @@ const base = import.meta.env.BASE_URL;
 
   .banner__image {
     max-width: 100%;
+    clip-path: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg"><defs><clipPath id="blob" clipPathUnits="objectBoundingBox"><path d="M 0.53,0.03 C 0.22,-0.02 -0.02,0.22 0.02,0.56 C 0.05,0.82 0.18,0.94 0.34,0.96 C 0.44,0.97 0.64,0.97 0.76,0.92 C 0.90,0.85 1.02,0.68 0.97,0.42 C 0.92,0.10 0.80,0.07 0.53,0.03 Z"/></clipPath></defs></svg>#blob');
   }
 
   @media (max-width: 980px) {
@@ -235,6 +249,7 @@ const base = import.meta.env.BASE_URL;
       display: block;
       width: min(100%, 1000px);
       margin: 0 auto;
+      clip-path: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg"><defs><clipPath id="blob" clipPathUnits="objectBoundingBox"><path d="M 0.55,0.02 C 0.30,-0.03 0.13,0.07 0.04,0.28 C -0.04,0.47 0.03,0.65 0.06,0.78 C 0.09,0.92 0.18,1.0 0.38,0.98 C 0.58,0.955 0.77,1.06 0.92,0.94 C 1.0,0.88 1.01,0.68 0.97,0.5 C 0.93,0.32 0.86,0.08 0.55,0.02 Z"/></clipPath></defs></svg>#blob');
     }
   }
 </style>

@@ -16,7 +16,8 @@ const introduction = nousRejoindre?.fields?.introduction as Document;
 const introductionHtml = introduction ? documentToHtmlString(introduction) : '';
 
 const photo = nousRejoindre?.fields?.visuel as ContentfulAssetField | undefined;
-const photoUrl = photo?.fields?.file?.url + '?w=1400&q=100&fm=webp';
+const photoBaseUrl = photo?.fields?.file?.url;
+const photoUrl = photoBaseUrl + '?w=1400&q=100&fm=webp';
 const photoAlt = photo?.fields?.title || 'Image de bannière';
 
 const auditionTitre = nousRejoindre?.fields?.auditionTitre;
@@ -42,7 +43,13 @@ const cotisationHtml = cotisation ? documentToHtmlString(cotisation) : '';
         <Fragment set:html={introductionHtml} />
       </div>
     </div>
-    <img class="introduction-section__image" src={`https:${photoUrl}`} alt={photoAlt} />
+    <img
+      class="introduction-section__image"
+      srcset={`https:${photoBaseUrl}?w=800&q=80&fm=webp 800w, https:${photoBaseUrl}?w=1400&q=100&fm=webp 1400w`}
+      sizes="(max-width: 980px) 700px, 50vw"
+      src={`https:${photoUrl}`}
+      alt={photoAlt}
+    />
   </section>
   <WaveSeparator />
   <section class="infos-section">
@@ -84,7 +91,7 @@ const cotisationHtml = cotisation ? documentToHtmlString(cotisation) : '';
 
   .introduction-section__image {
     width: 100%;
-    clip-path: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg"><defs><clipPath id="blob" clipPathUnits="objectBoundingBox"><path d="M 0.55,0.02 C 0.3,0 0.15,0.08 0.04,0.28 C -0.02,0.48 0.02,0.65 0.06,0.78 C 0.08,0.92 0.18,1 0.38,0.98 C 0.58,0.95 0.75,1.02 0.92,0.94 C 0.98,0.86 1.02,0.68 0.97,0.5 C 0.94,0.32 0.85,0.12 0.55,0.02 Z"/></clipPath></defs></svg>#blob');
+    clip-path: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg"><defs><clipPath id="blob" clipPathUnits="objectBoundingBox"><path d="M 0.55,0.02 C 0.30,-0.03 0.13,0.07 0.04,0.28 C -0.04,0.47 0.03,0.65 0.06,0.78 C 0.09,0.92 0.18,1.0 0.38,0.98 C 0.58,0.955 0.77,1.06 0.92,0.94 C 1.0,0.88 1.01,0.68 0.97,0.5 C 0.93,0.32 0.86,0.08 0.55,0.02 Z"/></clipPath></defs></svg>#blob');
   }
 
   /* Infos */
