@@ -24,14 +24,22 @@ const lienHelloAsso = footer?.fields?.lienHelloAsso as string;
       <p class="adress">{adresse}</p>
       <a href=`${base}/mentions-legales`>Mentions légales</a>
     </div>
-    <div>
-      <h3>Téléphone</h3>
-      {telephone && <p>{telephone}</p>}
-    </div>
-    <div>
-      <h3>Courriel</h3>
-      {email && <p>{email}</p>}
-    </div>
+    {
+      telephone && (
+        <div>
+          <h3>Téléphone</h3>
+          <p>{telephone}</p>
+        </div>
+      )
+    }
+    {
+      email && (
+        <div>
+          <h3>Courriel</h3>
+          <p>{email}</p>
+        </div>
+      )
+    }
   </div>
   <div class="right">
     <ul>
