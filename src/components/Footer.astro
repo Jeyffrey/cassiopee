@@ -1,8 +1,6 @@
 ---
 import { contentfulClient } from '../lib/contentful';
 
-const base = import.meta.env.BASE_URL;
-
 const entries = await contentfulClient.getEntries({
   content_type: 'footer',
 });
@@ -22,7 +20,7 @@ const lienHelloAsso = footer?.fields?.lienHelloAsso as string;
     <div>
       <h3>CHOEUR CASSIOPÉE</h3>
       <p class="adress">{adresse}</p>
-      <a href=`${base}/mentions-legales`>Mentions légales</a>
+      <a href="/mentions-legales">Mentions légales</a>
     </div>
     {
       telephone && (

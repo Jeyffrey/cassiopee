@@ -6,8 +6,6 @@ import { documentToHtmlString } from '@contentful/rich-text-html-renderer';
 import type { ContentfulAssetField } from '../types/contentful';
 import WaveSeparator from '../components/WaveSeparator.astro';
 
-const base = import.meta.env.BASE_URL;
-
 const entries = await contentfulClient.getEntries({
   content_type: 'accueil',
 });
@@ -60,10 +58,10 @@ const photoAlt = photo?.fields?.title || 'Image de bannière';
       <div class="presentation-section__content">
         <Fragment set:html={presentationHtml} />
       </div>
-      <a href={`${base}/le-choeur`} class="presentation-section__link c-global-link"
+      <a href="/le-choeur" class="presentation-section__link c-global-link"
         >Découvrir le chœur</a
       >
-      <a href={`${base}/nous-rejoindre`} class="presentation-section__link c-global-link"
+      <a href="/nous-rejoindre" class="presentation-section__link c-global-link"
         >Nous rejoindre</a
       >
     </section>
@@ -84,7 +82,7 @@ const photoAlt = photo?.fields?.title || 'Image de bannière';
               </li>
             ))}
           </ul>
-          <a href={`${base}/medias`} class="videos-section__link c-global-link">
+          <a href="/medias" class="videos-section__link c-global-link">
             Voir nos photos et vidéos
           </a>
         </section>
