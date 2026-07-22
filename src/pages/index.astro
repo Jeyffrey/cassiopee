@@ -35,7 +35,10 @@ const photoUrl = photoBaseUrl + '?w=1400&q=100&fm=webp';
 const photoAlt = photo?.fields?.title || 'Image de bannière';
 ---
 
-<Layout title="Chœur Cassiopée, Lyon - Chorale de jeunes">
+<Layout
+  title="Chœur Cassiopée, Lyon - Chorale de jeunes"
+  description="Le Chœur Cassiopée, chorale de jeunes à Lyon. Concerts, répertoire et vidéos : découvrez notre ensemble vocal et venez nous rejoindre."
+>
   <div class="container">
     <div class="banner">
       <h1 class="banner__titre c-global-title" set:html={banniereTexteHtml} />

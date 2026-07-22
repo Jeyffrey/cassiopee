@@ -13,7 +13,11 @@ const texte = (await entries.items[0].fields?.texte) as Document;
 const texteContent = texte ? documentToHtmlString(texte) : '';
 ---
 
-<Layout title="Contact | Cassiopée Astro" pageClass="contact-page">
+<Layout
+  title="Contact du chœur Cassiopée, Lyon - Chorale de jeunes"
+  description="Contactez le Chœur Cassiopée, chorale de jeunes à Lyon. Une question, une envie de nous rejoindre ou de nous inviter ? Écrivez-nous."
+  pageClass="contact-page"
+>
   <section class="c-global-container">
     <h1 class="c-global-title">Contact</h1>
     <div class="c-global-text-container">
